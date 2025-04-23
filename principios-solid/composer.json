@@ -1,0 +1,15 @@
+{
+  "name": "user/principios-solid",
+  "autoload": {
+    "psr-4": {
+      "Clases\\": "./clases"
+    }
+  },
+  "authors": [
+    {
+      "name": "Carlos Eduardo Ortiz",
+      "email": "carlosklinton.2016@gmail.com"
+    }
+  ],
+  "require": {}
+}
