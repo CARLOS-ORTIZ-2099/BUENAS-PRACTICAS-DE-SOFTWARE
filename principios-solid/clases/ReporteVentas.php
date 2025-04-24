@@ -3,6 +3,17 @@
 
 namespace Clases;
 
+/* Ejercicio:
+
+  Descripción: Crea una clase ReporteVentas que actualmente realiza múltiples tareas: calcular ventas, 
+  generar gráficos y enviar correos electrónicos.
+  Objetivo: Refactoriza la clase para que cada responsabilidad esté en una clase separada.
+  Punto de partida: Puedes inspirarte en los ejemplos de Principios SOLID en PHP: Explicación y Ejemplos
+  Prácticos.
+ 
+*/
+
+
 /* Esta clase de aqui tiene muchas responsabilidades desde sacar el reporte 
    de ventas hasta mandar email de confirmación 
 */

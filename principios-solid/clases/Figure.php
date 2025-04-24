@@ -2,6 +2,15 @@
 
 namespace Clases;
 
+/* Ejercicio:
+
+  Descripción: Tienes una clase Figura con métodos para dibujar diferentes formas (círculo, cuadrado, triángulo) 
+  utilizando condicionales.
+  Objetivo: Refactoriza el código para que puedas agregar nuevas figuras sin modificar la clase existente.
+  Recurso: Consulta el documento Ejercicios propuestos principios SOLID para obtener ejemplos similares.​
+*/
+
+
 
 /* El problema con esta clase es que si más adelante quisieramos agregar más
    formas tendriamos que modifica las clase drawFigure y eso podría 
