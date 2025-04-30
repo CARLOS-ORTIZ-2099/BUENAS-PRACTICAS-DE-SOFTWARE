@@ -7,6 +7,7 @@ interface i_FuncionatiesForTask
 {
   // esta función se agrego de último
   public static function changeStateTask(Routes $route);
+  public static function priorityChangeTask(Routes $route);
 }
 
 
@@ -26,6 +27,23 @@ class NewFuncionalities implements i_FuncionatiesForTask
     if ($result) {
       header('Location: /task?id=' . $id);
     }
+  }
+
+  public static function priorityChangeTask(Routes $route)
+  {
+    $id = $_GET['id'];
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $priority = $_POST['priority'];
+      $result =  Task::changePriority($priority, $id);
+      if ($result) {
+        header("Location: /");
+      }
+    }
+    $route->render(
+      [
+        'view' => '/pages/priority-page'
+      ]
+    );
   }
 }
 

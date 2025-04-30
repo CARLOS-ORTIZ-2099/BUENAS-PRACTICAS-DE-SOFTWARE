@@ -7,13 +7,24 @@ interface i_FuncionatiesForModelTask
 {
   // esta función se agrego de último
   public static function changeState($state, $id);
+
+  public static function changePriority($priority, $id);
 }
+
+
 class NewFuncionalitiesModelTask
 extends ConnectDb implements i_FuncionatiesForModelTask
 {
+  protected $priority;
   public static function changeState($state, $id)
   {
     $query = "UPDATE task SET state = {$state} WHERE id = {$id} ;";
+    $result = self::$db->query($query);
+    return $result;
+  }
+  public static function changePriority($priority, $id)
+  {
+    $query = "UPDATE task SET priority = '{$priority}' WHERE id = {$id} ;";
     $result = self::$db->query($query);
     return $result;
   }

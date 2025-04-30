@@ -24,6 +24,8 @@ $newRoute->post('/eliminar', [TaskController::class, 'deleteTask']);
 $newRoute->get('/editar', [TaskController::class, 'editTask']);
 $newRoute->post('/editar', [TaskController::class, 'editTask']);
 $newRoute->get('/change-state', [TaskController::class, 'changeStateTask']);
+$newRoute->get('/priority-change', [TaskController::class, 'priorityChangeTask']);
+$newRoute->post('/priority-change', [TaskController::class, 'priorityChangeTask']);
 
 /* debuguear($newRoute); */
 
