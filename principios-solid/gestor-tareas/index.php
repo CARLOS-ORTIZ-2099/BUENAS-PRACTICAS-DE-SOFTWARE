@@ -23,6 +23,8 @@ $newRoute->post('/crear', [TaskController::class, 'createTask']);
 $newRoute->post('/eliminar', [TaskController::class, 'deleteTask']);
 $newRoute->get('/editar', [TaskController::class, 'editTask']);
 $newRoute->post('/editar', [TaskController::class, 'editTask']);
+$newRoute->get('/change-state', [TaskController::class, 'changeStateTask']);
+
 /* debuguear($newRoute); */
 
 $newRoute->execute();

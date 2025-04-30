@@ -2,7 +2,26 @@
 
 require_once "ConnectDb.php";;
 
-class Task extends ConnectDb
+
+interface i_FuncionatiesForModelTask
+{
+  // esta función se agrego de último
+  public static function changeState($state, $id);
+}
+class NewFuncionalitiesModelTask
+extends ConnectDb implements i_FuncionatiesForModelTask
+{
+  public static function changeState($state, $id)
+  {
+    $query = "UPDATE task SET state = {$state} WHERE id = {$id} ;";
+    $result = self::$db->query($query);
+    return $result;
+  }
+}
+
+
+
+class Task extends NewFuncionalitiesModelTask
 {
 
   private $state;
@@ -144,11 +163,12 @@ class Task extends ConnectDb
       // en la db
       $obj = new static;
       foreach ($row as $key => $value) {
-        $obj->$key = $value;
+        if ($value !== null) {
+          $obj->$key = $value;
+        }
       }
       $storage[] = $obj;
     }
-
     return $storage;
   }
 
@@ -156,11 +176,5 @@ class Task extends ConnectDb
   static function getMessages()
   {
     return self::$messages;
-  }
-
-  // aún no se usa
-  public function changeState()
-  {
-    /* lógica para editar el estado de una tarea */
   }
 }

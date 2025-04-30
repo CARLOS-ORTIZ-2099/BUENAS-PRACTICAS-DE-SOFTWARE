@@ -10,3 +10,6 @@ CREATE TABLE IF NOT EXISTS task (
 
 INSERT INTO task (state, title, description, category) 
 VALUES() 
+
+
+ALTER TABLE task ADD COLUMN priority VARCHAR(60);

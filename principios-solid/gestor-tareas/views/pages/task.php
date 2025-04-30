@@ -8,6 +8,13 @@
   </div>
 
   <a href="/editar?id=<?= $task->getProperty('id') ?>">editar tarea</a>
+  <br>
+  <br>
+  <br>
+  <a href="/change-state?id=<?= $task->getProperty('id') ?>">cambiar estado</a>
+  <br>
+  <br>
+  <br>
   <form action="/eliminar" method="POST">
     <input type="hidden" value="<?= $task->getProperty('id') ?>" name="id">
     <input type="submit" value="eliminar tarea">

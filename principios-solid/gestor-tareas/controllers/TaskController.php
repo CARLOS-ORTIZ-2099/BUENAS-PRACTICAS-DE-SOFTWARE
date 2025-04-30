@@ -3,9 +3,37 @@
 require_once "models/Task.php";
 
 
-class TaskController
+interface i_FuncionatiesForTask
 {
+  // esta función se agrego de último
+  public static function changeStateTask(Routes $route);
+}
 
+
+class NewFuncionalities implements i_FuncionatiesForTask
+{
+  public static function changeStateTask(Routes $route)
+  {
+    $id = $_GET['id'];
+    $changeStateTask = Task::showTask($id);
+    $state = $changeStateTask->getProperty('state');
+    if ($state == 1) {
+      $state = 0;
+    } else {
+      $state = 1;
+    }
+    $result = Task::changeState($state, $id);
+    if ($result) {
+      header('Location: /task?id=' . $id);
+    }
+  }
+}
+
+
+
+class TaskController extends NewFuncionalities
+{
+  // LAS FUNCIONALIDADES DE AQUÍ YA ESTABAN PREVIAMENTE DEFINIDAS
   //mostrar todas las tareas
   public static function inicio(Routes $route)
   {
