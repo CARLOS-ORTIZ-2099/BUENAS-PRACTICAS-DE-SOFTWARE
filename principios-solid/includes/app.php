@@ -2,4 +2,7 @@
 
 require_once __DIR__ . "/functions.php";
 require_once __DIR__ . "/../vendor/autoload.php";
-/* echo __DIR__; */
+require_once __DIR__ . "/db.php";
+require_once __DIR__ . "/../gestor-tareas/models/ConnectDb.php";
+
+ConnectDb::connect($db);
