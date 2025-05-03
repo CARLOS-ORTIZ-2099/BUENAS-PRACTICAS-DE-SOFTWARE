@@ -49,3 +49,16 @@ Principios SOLID aplicados:
 - SRP: Clases separadas para la gestión de libros y usuarios.
 
 - LSP: Permitir que diferentes tipos de usuarios (estudiantes, profesores) interactúen con el sistema sin alterar su comportamiento.
+
+# interface
+
+- solo puede tener constantes NO propiedades
+- los metodos puedes ser de instancia o estaticos y públicos
+- se puede heredar de multiples interfaces
+
+# clase abstracta
+
+- puede tener propiedade publicas, protegidas , privadas
+- los métodos abstractos pueden ser públicos y protegidos(esto es así ya que estos métodos se tiene que implementar en las clases que los heredan si o si ) su definición se realiza en la clase que los implementa
+- los métodos NO abstractos pueden ser públicos, protegidos, privados (ya que estos no necesariamente se van a implementar en otras clase)
+- las clases abstractas pueden heredar de otras clases abstractas o no

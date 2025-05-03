@@ -3,7 +3,7 @@
 require_once "ConnectDb.php";;
 
 
-interface i_FuncionatiesForModelTask
+interface TaskModelInterface
 {
   // esta función se agrego de último
   public static function changeState($state, $id);
@@ -13,7 +13,7 @@ interface i_FuncionatiesForModelTask
 
 
 class NewFuncionalitiesModelTask
-extends ConnectDb implements i_FuncionatiesForModelTask
+extends ConnectDb implements TaskModelInterface
 {
   protected $priority;
   public static function changeState($state, $id)
