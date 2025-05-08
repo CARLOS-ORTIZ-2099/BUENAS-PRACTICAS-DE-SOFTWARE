@@ -1,20 +1,15 @@
 <?php
 
 
-interface i_email_notification
+
+
+interface INotification
 {
   public function sendMessage($data);
   public function getType();
 }
 
-interface i_sms_notification
-{
-  public function sendMessage($data);
-  public function getType();
-}
-
-
-class NotificacionEmail implements i_email_notification
+class NotificacionEmail implements INotification
 {
   public function sendMessage($data)
   {
@@ -26,7 +21,7 @@ class NotificacionEmail implements i_email_notification
   }
 }
 
-class NotificacionSms implements i_sms_notification
+class NotificacionSms implements INotification
 {
   public function sendMessage($data)
   {
@@ -38,7 +33,18 @@ class NotificacionSms implements i_sms_notification
   }
 }
 
-
+// aqui implmento otra notificacion
+class NotificacionFB implements INotification
+{
+  public function sendMessage($data)
+  {
+    debuguear("enviando mensaje de fb al : " . $data);
+  }
+  public function getType()
+  {
+    return "FB";
+  }
+}
 
 
 
@@ -48,19 +54,19 @@ class User extends ConnectDb
   protected $nombre;
   protected $valorTipoNotificacion;
   protected $tipoNotificacion;
-  public static $notificacion;
+  protected $notificacion;
 
-  public function __construct($params, $notificacion)
+  public function __construct($params, INotification $notificacion)
   {
     $this->nombre = $params['nombre'] ?? null;
     $this->valorTipoNotificacion = $params['valorTipoNotificacion'];
     $this->tipoNotificacion = $notificacion->getType();
-    self::$notificacion = $notificacion;
+    $this->notificacion = $notificacion;
   }
 
   public function save()
   {
-    self::$notificacion->sendMessage($this->valorTipoNotificacion);
+    $this->notificacion->sendMessage($this->valorTipoNotificacion);
     $query = "INSERT INTO notificaciones (nombre, valorTipoNotificacion, tipoNotificacion) VALUES ('{$this->nombre}', '{$this->valorTipoNotificacion}', '{$this->tipoNotificacion}');";
     self::$db->query($query);
   }

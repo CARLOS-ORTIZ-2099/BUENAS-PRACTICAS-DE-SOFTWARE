@@ -13,16 +13,15 @@
 
 */
 
-require_once './ReporteVentas.php';
+require_once './Class.php';
 require_once __DIR__ . "/../includes/app.php";
 
 
 
-$newReporteVentas = new ReporteVentas();
-$newReporteVentas->showMessage();
 
-$newCalculateSales = new CalculateSales;
-$totalSales = $newCalculateSales->calculateSales(date('D-M-Y'));
+
+$newCalculateSales = new SalesCalculate;
+$totalSales = $newCalculateSales->salesCalculate(date('D-M-Y'));
 
 $createDashboard = new CreateDashboard;
 $createDashboard->createDashboard($totalSales);

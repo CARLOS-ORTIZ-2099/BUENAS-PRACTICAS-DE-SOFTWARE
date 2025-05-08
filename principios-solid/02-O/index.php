@@ -13,17 +13,24 @@
 
 */
 
-require_once './Figure.php';
+require_once './Class.php';
 require_once __DIR__ . "/../includes/app.php";
 
 
 
-$newFigure = new Figure(new Triangulo);
-$newFigure->showMessage();
-$newFigure = new Figure(new Circulo);
-$newFigure->showMessage();
-$newFigure = new Figure(new Rombo);
-$newFigure->showMessage();
+$newFigure1 = new Figure(new Triangle, new Big);
+$newFigure1->showFigure();
+$newFigure1->showSize();
 
-$newFigure->showsize(new Great);
-$newFigure->showsize(new Small);
+$newFigure2 = new Figure(new Circle, new Small);
+$newFigure2->showFigure();
+$newFigure2->showSize();
+
+$newFigure3 = new Figure(new Diamond, new Big);
+$newFigure3->showFigure();
+$newFigure3->showSize();
+
+// implementar un rectangulo
+$newFigure4 = new Figure(new Rectangle, new Big);
+$newFigure4->showFigure();
+$newFigure4->showSize();
