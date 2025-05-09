@@ -13,13 +13,13 @@
   
 */
 
-require_once "./Robot.php";
+require_once "./Class.php";
 require_once __DIR__ . "/../includes/app.php";
 
 
 
 $newRobot = new Robot;
-$newRobot->trabajar();
+$newRobot->work();
 
 $newHumano = new Humano;
-$newHumano->comer();
+$newHumano->eat();

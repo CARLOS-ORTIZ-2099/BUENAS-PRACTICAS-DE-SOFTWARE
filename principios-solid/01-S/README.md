@@ -4,6 +4,8 @@ Este nos dice que una clase, modulo sólo puede tener una responsabilidad, pero 
 
 Por ejemplo : si tengo la clase Alumno los métodos para esa clase no deberían hacer cosas cómo enviar emails, mostrar vistas, etc.
 
+> cada clase tiene que estar encapsulada de otras, tal que si hay un cambio en una clase no afecta las demas
+
 ---
 
 ## Preguntas que debemos hacernos para saber si estamos violando este principio

@@ -13,15 +13,18 @@
 
    Recurso: Revisa los ejemplos en el repositorio Software-ibero-segundo-semestre/Principios-SOLID. 
 */
-require_once "./Animal.php";
+require_once "./Class.php";
 require_once __DIR__ . "/../includes/app.php";
 
 
 
-$newAnimal = new Animal;
-$newPerro = new Perro;
-$newPerro->hacerSonido();
+
+$newPerro = new CanDoSound('perro');
+$newPerro->doSound();
 
 
-$newPez = new Pez;
-$newPez->hacerSonido();
+$newPez = new CantDoSound('pez');
+$newPez->doSound();
+
+$newGato = new CanDoSound('gato');
+$newGato->doSound();

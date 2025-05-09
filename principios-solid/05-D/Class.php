@@ -43,37 +43,37 @@
 
 // El código corregido se vería así 👇
 
-interface Aparato
+interface Apparatus
 {
-  public function encender();
+  public function turnOnDevice(): void;
 }
 
-class Bombilla implements Aparato
+class Lightbulb implements Apparatus
 {
-  public function encender()
+  public function turnOnDevice(): void
   {
     debuguear("se enciende la bombilla");
   }
 }
 
-class Consola implements Aparato
+class Console implements Apparatus
 {
-  public function encender()
+  public function turnOnDevice(): void
   {
     debuguear("se enciende la consola");
   }
 }
 
-class Interruptor
+class SwitchClass
 {
-  private $aparato;
-  public function __construct(Aparato $aparato)
+  private $apparatus;
+  public function __construct(Apparatus $apparatus)
   {
-    $this->aparato = $aparato;
+    $this->apparatus = $apparatus;
   }
 
-  public function ActiveAccion()
+  public function ActiveAccion(): void
   {
-    $this->aparato->encender();
+    $this->apparatus->turnOnDevice();
   }
 }

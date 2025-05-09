@@ -12,9 +12,10 @@
 
 */
 
-require_once  "../includes/app.php";
-require_once "./Routes.php";
+require_once  "../../includes/app.php";
+require_once "../Routes.php";
 require_once "./controllers/TaskController.php";
+
 $newRoute = new Routes();
 $newRoute->get('/', [TaskController::class, 'inicio']);
 $newRoute->get('/task', [TaskController::class, 'showTask']);

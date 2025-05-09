@@ -30,8 +30,8 @@
 // interface para las formas
 interface Shape
 {
-  public function drawFigure();
-  public function getFigure();
+  public function drawFigure(): void;
+  public function getFigure(): string;
 }
 // clases que implementan la interface forma
 class Triangle implements Shape
@@ -94,7 +94,7 @@ class Rectangle implements Shape
 
 interface Size
 {
-  public function showFigureSize(string $typeFigure);
+  public function showFigureSize(string $typeFigure): void;
 }
 
 // clases que implementan la interface tamaño

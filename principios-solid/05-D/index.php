@@ -13,13 +13,13 @@
 
 */
 
-require_once "./Interruptor.php";
+require_once "./Class.php";
 require_once __DIR__ . "/../includes/app.php";
 
 
 
-$newInterruptor = new Interruptor(new Bombilla);
+$newInterruptor = new SwitchClass(new Lightbulb);
 $newInterruptor->ActiveAccion();
 
-$newInterruptor = new Interruptor(new Consola);
+$newInterruptor = new SwitchClass(new Console);
 $newInterruptor->ActiveAccion();
