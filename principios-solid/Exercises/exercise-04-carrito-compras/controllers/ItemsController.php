@@ -1,6 +1,6 @@
 <?php
 
-require_once "models/Items.php";
+require_once __DIR__ . "/../models/Items.php";
 
 
 class itemsController

@@ -1,6 +1,7 @@
 <?php
 
-require_once "models/Task.php";
+require_once __DIR__ . "/../models/Task.php";
+
 
 
 interface i_FuncionatiesForTask

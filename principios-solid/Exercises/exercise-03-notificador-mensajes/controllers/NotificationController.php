@@ -1,6 +1,6 @@
 <?php
 
-require_once "models/Notification.php";
+require_once __DIR__ . "/../models/Notification.php";
 
 class NotificationController
 {
@@ -15,7 +15,7 @@ class NotificationController
     ];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      debuguear($_POST);
+      //debuguear($_POST);
 
       foreach ($tiposNotificacion as $key => $clase) {
         if (!empty($_POST[$key])) {

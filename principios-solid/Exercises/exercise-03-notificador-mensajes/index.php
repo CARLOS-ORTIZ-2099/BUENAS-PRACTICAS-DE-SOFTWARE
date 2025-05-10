@@ -12,9 +12,9 @@ Principios SOLID aplicados:
 
 
 <?php
-require_once  "../includes/app.php";
-require_once "./Routes.php";
-require_once "./controllers/NotificationController.php";
+require_once  __DIR__ . "/../../includes/app.php";
+require_once __DIR__ . "/../Routes.php";
+require_once __DIR__ . "/controllers/NotificationController.php";
 
 $newRoute = new Routes();
 

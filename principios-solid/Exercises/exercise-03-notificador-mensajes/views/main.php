@@ -11,9 +11,9 @@
 
   <main>
 
-    <?php require_once "templates/navbar.php" ?>
 
-    <h1>App para crear tareas</h1>
+
+    <h1>App para mandar notificaciones</h1>
 
     <?php require_once $routeViewComplement ?>
 

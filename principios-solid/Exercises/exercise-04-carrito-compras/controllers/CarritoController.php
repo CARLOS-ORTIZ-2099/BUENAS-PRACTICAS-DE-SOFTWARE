@@ -1,13 +1,13 @@
 <?php
 
 
-require_once "models/Carrito.php";
+require_once __DIR__ . "/../models/Carrito.php";
 
 class CarritoController
 {
   static function addToCart()
   {
     // aqui nos comunicameo con el modelo de carrito 
-    $shoppingcart = new ManageShoppingCart();
+    debuguear('entro a aqui');
   }
 }

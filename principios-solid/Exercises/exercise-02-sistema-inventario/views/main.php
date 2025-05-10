@@ -11,9 +11,9 @@
 
   <main>
 
+    <?php require_once "./views/templates/navbar.php" ?>
 
-
-    <h1>App para crear tareas</h1>
+    <h1>App para gestionar productos</h1>
 
     <?php require_once $routeViewComplement ?>
 

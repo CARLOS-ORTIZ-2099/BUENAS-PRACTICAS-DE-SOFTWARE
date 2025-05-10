@@ -4,7 +4,7 @@
 
 /* - LSP (Sustitución de Liskov): Utilizar herencia para diferentes tipos de productos que puedan sustituirse sin alterar el comportamiento del programa. */
 
-require_once "models/Product.php";
+require_once __DIR__ . "/../models/Product.php";
 
 class ProductController
 {

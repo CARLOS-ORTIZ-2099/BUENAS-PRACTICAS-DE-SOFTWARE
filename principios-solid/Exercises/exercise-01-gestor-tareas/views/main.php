@@ -11,7 +11,7 @@
 
   <main>
 
-    <?php require_once "templates/navbar.php" ?>
+    <?php require_once "./views/templates/navbar.php" ?>
 
     <h1>App para crear tareas</h1>
 

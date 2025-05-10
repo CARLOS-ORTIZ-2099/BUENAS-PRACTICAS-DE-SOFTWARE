@@ -15,6 +15,9 @@ VALUES()
 
 ALTER TABLE task ADD COLUMN priority VARCHAR(60);
 
+DROP TABLE IF EXISTS task;
+TRUNCATE TABLE task;
+
 
 -- inventario de productos
 

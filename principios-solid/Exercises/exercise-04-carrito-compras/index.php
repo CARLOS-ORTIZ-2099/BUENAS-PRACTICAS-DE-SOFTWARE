@@ -12,10 +12,10 @@ Principios SOLID aplicados:
 
 
 <?php
-require_once  "../includes/app.php";
-require_once "./Routes.php";
-require_once "./controllers/ItemsController.php";
-require_once "./controllers/CarritoController.php";
+require_once  __DIR__ . "/../../includes/app.php";
+require_once __DIR__ . "/../Routes.php";
+require_once __DIR__ . "/controllers/ItemsController.php";
+require_once __DIR__ . "/controllers/CarritoController.php";
 
 $newRoute = new Routes();
 $newRoute->get('/', [itemsController::class, 'inicio']);
