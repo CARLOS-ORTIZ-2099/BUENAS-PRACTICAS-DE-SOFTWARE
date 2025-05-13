@@ -56,6 +56,10 @@ CREATE TABLE IF NOT EXISTS users (
 DROP TABLE IF EXISTS users;
 TRUNCATE TABLE users;
 
+INSERT INTO users (name, email, password) 
+VALUES ('maria', 'maria@maria', '123456');
+
+
 CREATE TABLE IF NOT EXISTS items (
    id INT unsigned AUTO_INCREMENT PRIMARY KEY,
    name VARCHAR(60),
@@ -65,6 +69,12 @@ CREATE TABLE IF NOT EXISTS items (
 
 DROP TABLE IF EXISTS items;
 TRUNCATE TABLE items;
+
+
+INSERT INTO items (name, price, category) 
+VALUES ('iphone 1', 1000.50, 'tecnologia'),
+('silla', 500, 'hogar'),
+('zapatillas', 60, 'calzado');
 
 
 CREATE TABLE IF NOT EXISTS cart_items (
@@ -81,8 +91,16 @@ CREATE TABLE IF NOT EXISTS cart_items (
 DROP TABLE IF EXISTS cart_items;
 TRUNCATE TABLE cart_items;
 
-INSERT INTO items (name, price, category) 
-VALUES ('iphone 1', 1000.50, 'tecnologia'),
-('silla', 500, 'hogar'),
-('zapatillas', 60, 'calzado');
+INSERT INTO cart_items (item_id, user_id, quantity) 
+VALUES ('2', '2', '10');
+
+
+SELECT items.*, cart_items.id as id_item_cart, cart_items.quantity,
+  cart_items.user_id
+FROM cart_items
+INNER JOIN items
+ON cart_items.item_id = items.id
+WHERE user_id = 2 ;
+
+
 

@@ -18,8 +18,9 @@ require_once __DIR__ . "/controllers/ItemsController.php";
 require_once __DIR__ . "/controllers/CarritoController.php";
 
 $newRoute = new Routes();
-$newRoute->get('/', [itemsController::class, 'inicio']);
+$newRoute->get('/', [itemsController::class, 'init']);
 $newRoute->post('/addToCart', [CarritoController::class, 'addToCart']);
+$newRoute->get('/viewCart', [CarritoController::class, 'viewCart']);
 
 
 

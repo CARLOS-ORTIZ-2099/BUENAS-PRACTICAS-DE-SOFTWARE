@@ -24,5 +24,4 @@
     <input type="hidden" value="<?= $task->getProperty('id') ?>" name="id">
     <input type="submit" value="eliminar tarea">
   </form>
-
 </div>

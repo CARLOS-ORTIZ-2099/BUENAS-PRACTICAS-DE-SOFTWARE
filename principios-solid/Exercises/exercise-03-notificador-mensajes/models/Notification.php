@@ -3,44 +3,44 @@
 
 
 
-interface INotification
+interface Notification
 {
-  public function sendMessage($data);
-  public function getType();
+  public function sendMessage($data): string;
+  public function getType(): string;
 }
 
-class NotificacionEmail implements INotification
+class EmailNotification implements Notification
 {
-  public function sendMessage($data)
+  public function sendMessage($data): string
   {
-    debuguear("enviando mensaje de email al : " . $data);
+    return "enviando mensaje de email al : " . $data;
   }
-  public function getType()
+  public function getType(): string
   {
     return "EMAIL";
   }
 }
 
-class NotificacionSms implements INotification
+class SmsNotification implements Notification
 {
-  public function sendMessage($data)
+  public function sendMessage($data): string
   {
-    debuguear("enviando mensaje de sms al : " . $data);
+    return "enviando mensaje de sms al : " . $data;
   }
-  public function getType()
+  public function getType(): string
   {
     return "SMS";
   }
 }
 
 // aqui implmento otra notificacion
-class NotificacionFB implements INotification
+class FBNotification implements Notification
 {
-  public function sendMessage($data)
+  public function sendMessage($data): string
   {
-    debuguear("enviando mensaje de fb al : " . $data);
+    return "enviando mensaje de fb al : " . $data;
   }
-  public function getType()
+  public function getType(): string
   {
     return "FB";
   }
@@ -56,7 +56,7 @@ class User extends ConnectDb
   protected $tipoNotificacion;
   protected $notificacion;
 
-  public function __construct($params, INotification $notificacion)
+  public function __construct($params, Notification $notificacion)
   {
     $this->nombre = $params['nombre'] ?? null;
     $this->valorTipoNotificacion = $params['valorTipoNotificacion'];
@@ -64,11 +64,12 @@ class User extends ConnectDb
     $this->notificacion = $notificacion;
   }
 
-  public function save()
+  public function save(): array
   {
-    $this->notificacion->sendMessage($this->valorTipoNotificacion);
+    $message = $this->notificacion->sendMessage($this->valorTipoNotificacion);
     $query = "INSERT INTO notificaciones (nombre, valorTipoNotificacion, tipoNotificacion) VALUES ('{$this->nombre}', '{$this->valorTipoNotificacion}', '{$this->tipoNotificacion}');";
-    self::$db->query($query);
+    $result = self::$db->query($query);
+    return [$result, $message];
   }
 }
 //$userNuevo = new User(['name' => ''], new NotificacionEmail);

@@ -10,8 +10,9 @@
         <p>id : <?= $item->getProperty('id') ?></p>
       </article>
       <form action="/addToCart" method="POST">
-        <input type="hidden" name="id" value="<?= $item->getProperty('id') ?>">
-        <input type="submit" value="comprar">
+        <input type="hidden" name="itemId" value="<?= $item->getProperty('id') ?>">
+        <input type="number" name="quantity" placeholder="insert you  quantity" min="1">
+        <input type="submit" value="añadir">
       </form>
     <?php endforeach; ?>
   <?php else : ?>

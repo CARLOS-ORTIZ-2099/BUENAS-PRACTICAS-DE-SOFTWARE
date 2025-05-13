@@ -1,29 +1,31 @@
 <?php
 
-// continuar aqui
+
 // clase abstracta para heredar método de "tiene delivery"
+// AQUI => ProductDelivery define el comportamiento común sin imponer una implementación fija, asegurando que cualquier subclase pueda sustituirla sin romper el programa.
 abstract class ProductDelivery
 {
-
-  abstract public function haveDelivery();
+  abstract public function hasDelivery(): bool;
 }
 
 // recalcar que no todos los productos tendran delivery, ya sea por 
 // que depende del precio, marca, ubicación, etc
 
-// esta clase será para los productos que si cuentan con delivery y hereda de ProductDelivery
-class NotieneDelivery extends ProductDelivery
+// esta clase será para los productos que no cuentan con delivery y hereda de ProductDelivery
+
+
+class NotHasDelivery extends ProductDelivery
 {
-  public function haveDelivery()
+  public function hasDelivery(): bool
   {
     echo "este producto NO tiene delivery";
     return false;
   }
 }
-// esta clase será para los productos que no cuentan con delivery y hereda de ProductDelivery
-class SiTieneDelivery extends ProductDelivery
+// esta clase será para los productos que si cuentan con delivery y hereda de ProductDelivery
+class YesHasDelivery extends ProductDelivery
 {
-  public function haveDelivery()
+  public function hasDelivery(): bool
   {
     echo "este producto SI tiene delivery";
     return true;
@@ -54,7 +56,7 @@ class Product extends ConnectDb
     $this->applyDelivery = $params['applyDelivery'] ?? null;
   }
 
-  public static function getAll()
+  public static function getAll(): array
   {
     $query = "SELECT * FROM products";
     $result = self::$db->query($query);
@@ -62,7 +64,7 @@ class Product extends ConnectDb
     return $data;
   }
 
-  public static function getOne($id)
+  public static function getOne($id): Product
   {
     $query = "SELECT * FROM products WHERE id = $id";
     $result = self::$db->query($query);
@@ -70,7 +72,7 @@ class Product extends ConnectDb
     return array_shift($data);
   }
 
-  public function save()
+  public function save(): bool
   {
 
     $delivery = $this->checkContinentCategory();
@@ -82,34 +84,35 @@ class Product extends ConnectDb
     return $result;
   }
 
-  public function applyDiscount(ProductDelivery $delivery)
-  {
-    $boolean = $delivery->haveDelivery();
-
-    $this->applyDelivery = $boolean;
-  }
-
-  public function checkContinentCategory()
+  public function checkContinentCategory(): ProductDelivery
   {
     $validsContinents = ['america', 'asia', 'europa'];
     $validsCategories = ['tecnologia', 'videojuegos', 'libros'];
 
 
     if (in_array($this->continent, $validsContinents) && in_array($this->category, $validsCategories)) {
-      return new SiTieneDelivery();
+      return new YesHasDelivery();
     } else {
-      return new NotieneDelivery();
+      return new NotHasDelivery();
     }
   }
 
-  public function deleteOne()
+  public function applyDiscount(ProductDelivery $delivery): void
+  {
+    $boolean = $delivery->hasDelivery();
+
+    $this->applyDelivery = $boolean;
+  }
+
+
+  public function deleteOne(): bool
   {
     $query = "DELETE FROM products WHERE id = '{$this->id}';";
     $result = self::$db->query($query);
     return $result;
   }
 
-  public function updateOne()
+  public function updateOne(): bool
   {
     $delivery = $this->checkContinentCategory();
     $this->applyDiscount($delivery);
@@ -120,7 +123,7 @@ class Product extends ConnectDb
   }
 
 
-  public function getProperties()
+  public function getProperties(): array
   {
     $array = [];
     foreach ($this as $clave => $valor) {
@@ -129,7 +132,7 @@ class Product extends ConnectDb
     return $array;
   }
 
-  public static function processData($result)
+  public static function processData($result): array
   {
     $storage = [];
 
@@ -148,12 +151,12 @@ class Product extends ConnectDb
   }
 
   // obtiene una propiedad en especifico
-  public function getProperty($key)
+  public function getProperty($key): string|bool
   {
     return $this->$key;
   }
   // setea una propiedad en especifico
-  public function setProperty($key, $value)
+  public function setProperty($key, $value): void
   {
     $this->$key = $value;
   }

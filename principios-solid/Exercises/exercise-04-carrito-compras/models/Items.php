@@ -2,13 +2,13 @@
 class Items extends ConnectDb
 {
 
-  protected $id;
-  protected $name;
-  protected $price;
-  protected $category;
+  private $id;
+  private $name;
+  private $price;
+  private $category;
 
 
-
+  // obtiene todos los items de la tienda
   public static function getAll()
   {
     $query = "SELECT * FROM items;";
@@ -17,6 +17,16 @@ class Items extends ConnectDb
     return $result;
   }
 
+  // obtiene  un item especifico
+  public static function getOne($itemId)
+  {
+    $query = "SELECT * FROM items WHERE id = '{$itemId}'";
+    $result = self::$db->query($query);
+    $result = self::processData($result);
+    return array_shift($result);
+  }
+
+  // convierte el resultado de la query en una rray de instancias
   public static function processData($result)
   {
     $storage = [];

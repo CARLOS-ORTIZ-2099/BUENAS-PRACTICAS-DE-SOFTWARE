@@ -5,18 +5,18 @@ require_once __DIR__ . "/../models/Notification.php";
 class NotificationController
 {
 
+  // controlador que muetsra el formulario de registro
   public static function initController(Routes $route)
   {
     $message = '';
     $tiposNotificacion = [
-      'email' => NotificacionEmail::class,
-      'sms'   => NotificacionSms::class,
-      'fb'    => NotificacionFB::class
+      'email' => EmailNotification::class,
+      'sms'   => SmsNotification::class,
+      'fb'    => FBNotification::class
     ];
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       //debuguear($_POST);
-
       foreach ($tiposNotificacion as $key => $clase) {
         if (!empty($_POST[$key])) {
           $notificacion = new $clase();
@@ -24,8 +24,11 @@ class NotificationController
             'nombre' => $_POST['nombre'],
             'valorTipoNotificacion' => $_POST[$key]
           ], $notificacion);
-          $newUser->save();
-          $message = '';
+          $response = $newUser->save();
+          if ($response[0]) {
+            $message = $response[1];
+          }
+
           break;
         } else {
           $message = 'el tipo es obligatorio';
@@ -36,7 +39,7 @@ class NotificationController
 
     $route->render(
       [
-        'view' => '/inicio',
+        'view' => '/pages/inicio',
         'message' => $message
       ]
     );

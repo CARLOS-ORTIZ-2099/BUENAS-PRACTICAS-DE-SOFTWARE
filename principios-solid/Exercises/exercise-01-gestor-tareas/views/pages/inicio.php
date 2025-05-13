@@ -15,7 +15,8 @@
             <div>
               <span>estado :<?= $task->getProperty('state') == 0 ? 'pendiente' : 'completo' ?> </span>
               <span>categoria : <?= $task->getProperty('category') ?></span>
-              <span>prioridad : <?= $task->getProperty('priority') ?? 'no definida' ?></span>
+
+              <span>prioridad : <?= $task->getProperty('priority') ?></span>
             </div>
           </div>
           <a href="<?= '/task?id=' . $task->getProperty('id') ?>">see more about task</a>
@@ -30,5 +31,8 @@
 
 
   </div>
-
+  <br>
+  <br>
+  <br>
+  <a href="/priority-high">click for create new task with prioriry high</a>
 </section>

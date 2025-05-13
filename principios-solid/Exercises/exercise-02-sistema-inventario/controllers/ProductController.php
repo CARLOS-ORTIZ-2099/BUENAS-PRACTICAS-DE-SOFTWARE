@@ -2,17 +2,17 @@
 
 
 
-/* - LSP (Sustitución de Liskov): Utilizar herencia para diferentes tipos de productos que puedan sustituirse sin alterar el comportamiento del programa. */
+/* - LSP (Sustitución de Liskov): Utilizar herencia para diferentes tipos de productos que puedan
+   sustituirse sin alterar el comportamiento del programa. 
+*/
 
 require_once __DIR__ . "/../models/Product.php";
 
 class ProductController
 {
 
-
-
   // controlador para mostrar los productos
-  public static function showProductsController(Routes $route)
+  public static function showProductsController(Routes $route): void
   {
 
     $products = Product::getAll();
@@ -25,7 +25,7 @@ class ProductController
   }
 
   // controlador para mostrar un producto
-  public static function showProductController(Routes $route)
+  public static function showProductController(Routes $route): void
   {
     $id = $_GET['id'];
     $product = Product::getOne($id);
@@ -39,7 +39,7 @@ class ProductController
   }
 
   // controlador para crear los productos
-  public static function createProductController(Routes $route)
+  public static function createProductController(Routes $route): void
   {
     $message = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -61,7 +61,7 @@ class ProductController
 
 
   // controlador para eliminar los productos
-  public static function deleteProductController(Routes $route)
+  public static function deleteProductController(Routes $route): void
   {
     $id = $_GET['id'];
     $productDelete = new Product();
@@ -73,9 +73,8 @@ class ProductController
   }
 
 
-
   // controlador para editar los productos
-  public static function editProductController(Routes $route)
+  public static function editProductController(Routes $route): void
   {
     $id = $_GET['id'];
     $product = Product::getOne($id);
@@ -98,10 +97,4 @@ class ProductController
       ]
     );
   }
-
-
-
-
-  // controlador para cambiar la cantidad de los productos
-  public static function changeQuantityProductController(Routes $route) {}
 }

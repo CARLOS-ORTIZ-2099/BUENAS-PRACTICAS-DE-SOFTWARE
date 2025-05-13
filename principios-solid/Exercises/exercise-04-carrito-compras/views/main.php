@@ -11,7 +11,7 @@
 
   <main>
 
-
+    <?php require_once "./views/templates/navbar.php" ?>
 
     <h1>App de carritos de compras</h1>
 

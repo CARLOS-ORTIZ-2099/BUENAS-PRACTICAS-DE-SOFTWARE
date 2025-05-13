@@ -1,14 +1,4 @@
-<!-- 
-## 🛒 4. Carrito de Compras Simplificado
 
-Descripción: Una aplicación que permite agregar y eliminar productos de un carrito, y calcular el total.
-
-Principios SOLID aplicados:
-
-- SRP: Clases separadas para la gestión del carrito y el cálculo de precios.
-
-- OCP: Facilitar la adición de nuevos métodos de cálculo de precios sin modificar las clases existentes.
--->
 <?php
 
 interface MethodTypeCalculate
@@ -16,9 +6,6 @@ interface MethodTypeCalculate
   public function calculateMethod();
 }
 
-// metodos de calculo de precios 
-// - calculo con descuento
-// - calculo sin descuento
 
 class CalculateWithDiscount implements MethodTypeCalculate
 {
@@ -27,6 +14,7 @@ class CalculateWithDiscount implements MethodTypeCalculate
     // aqui la lógica para calcular los productos sin descuento
   }
 }
+
 class CalculateNotDiscount implements MethodTypeCalculate
 {
   public function calculateMethod()
@@ -44,73 +32,112 @@ class CalculateDicountDouble implements MethodTypeCalculate
 }
 
 
-class CalcutaPricesCart
+
+
+
+class ManageShoppingCart extends ConnectDb
 {
-  protected $method;
-  public function __construct(MethodTypeCalculate $method)
+  private $id;
+  private $item_id;
+  private $user_id;
+  private $quantity;
+
+  public function __construct($params = [])
   {
-    $this->method = $method;
+    $this->id = $params['id'] ?? null;
+    $this->item_id = $params['itemId'] ?? null;
+    $this->user_id = $params['userId'] ?? null;
+    $this->quantity = $params['quantity'] ?? 1;
   }
-
-  public function calculate()
+  // Recalcar que para la mayoria de los métodos, estaremos calculando
+  // constantemente el total a pagar
+  // añadir productos
+  public function addProduct()
   {
-    $this->method->calculateMethod();
-  }
-}
-/* Logica para que el acrrito de compras se sincronize con su respectivo 
-   metodo de pago
-   - si la cantidad de items en el carrito no superan las 5 unidades no se le aplica el descuento, caso contrario si se le aplica el descuento
-
-   - si en el carrito del usuario hay items de una determinada categoria 
-   (por lo menos 1 de esa categoria) si se le aplica el descuento sin
-   importar la cantidad
-
-   - en caso de que la cantidda de items del carrito del usuario sea superior
-   a 5 unidades y tenga un producto de la categoria que cumple con el 
-   descuento se le aplica doble descuento
-*/
-class ManageShoppingCart
-{
-  protected $id;
-  protected $productId;
-  protected $userId;
-  protected $quantity;
-
-  public function addProduct($product)
-  {
-    // comprobar que si el producto ya esta
-
+    // comprobar si el id de producto  ya esta en el carrito
+    // lo comprobamos de esta manera : 
+    // buscamos si hay un registro cuyo itemId sea igual al que tenemos y si el user_id sea igual al que este logueado
+    $item = $this->getOneCartItem();
     // si esta solo aumentamos su cantidad
-
-    // si no esta añadir producto
-
+    if ($item) {
+      $newQuantity = $this->quantity + $item['quantity'];
+      $query = "UPDATE cart_items SET quantity = {$newQuantity}
+      WHERE item_id = {$this->item_id} AND user_id = {$this->user_id}  
+      ";
+      $result = self::$db->query($query);
+      return $result;
+    }
+    // si no esta, añadir producto
+    else {
+      $query = "INSERT INTO cart_items (item_id, user_id, quantity)
+      VALUES({$this->item_id}, {$this->user_id}, {$this->quantity});
+      ";
+      $result = self::$db->query($query);
+      return $result;
+    }
   }
 
+  // obtiene un producto de la tabla cart_items
+  public function getOneCartItem()
+  {
+    $query = "SELECT * FROM cart_items 
+    WHERE item_id = '{$this->item_id}' AND user_id = '{$this->user_id}'";
+    $result = self::$db->query($query);
+    $result = self::processData($result);
+    $result = array_shift($result);
+    return $result;
+  }
+  // obtener todos los productos
+  public function getAllProducts()
+  {
+    // obtenemos todos los productos del carrito de un usuario
+    $query = "SELECT items.*, cart_items.id as id_item_cart, cart_items.quantity,
+    cart_items.user_id
+    FROM cart_items
+    INNER JOIN items
+    ON cart_items.item_id = items.id
+    WHERE user_id = {$this->user_id} ;";
+    $result = self::$db->query($query);
+    $result = self::processData($result);
+    //debuguear($result);
+    return $result;
+  }
+
+  // comvierte el resultado de la consulta en un objeto
+  public static function processData($result)
+  {
+    $storage = [];
+
+    while ($row  = $result->fetch_assoc()) {
+      $storage[] = $row;
+    }
+    return $storage;
+  }
+
+  // disminuir productos
+  public function reduceProduct($product)
+  {
+    // reducir la cantidad de un determinado producto
+
+    // dicha cantidad sera de 1 por defecto
+
+    // si el producto llegase a 0 unidades entonces lo 
+    // removemos del carrito
+
+  }
+  // remover un producto
   public function removeProduct($product)
   {
     // buscamos el producto en el carrito
     // luego lo quitamos del carrito
   }
-
-
-  public function lessQuantity()
-  {
-    // restamos una unidad al producto
-    // si se llega a cero sólo lo eliminamos del carrito
-  }
-
-
-  public function MoreQuantity()
-  {
-    // sumamos una unidad al producto en el carrito
-
-  }
-
-  public function emptyCart()
+  // remover todos los productos
+  public function removeAllProducts()
   {
     // eliminamos todos los items del carrito
   }
 
+  // obtener cantidad de productos
   public function getQuantityProducts()
   {
     // devolver la cantidad de items que contiene el carrito

@@ -4,38 +4,50 @@ require_once __DIR__ . "/../models/Task.php";
 
 
 
-interface i_FuncionatiesForTask
-{
-  // esta función se agrego de último
-  public static function changeStateTask(Routes $route);
-  public static function priorityChangeTask(Routes $route);
-}
 
-
-class NewFuncionalities implements i_FuncionatiesForTask
+class TaskController
 {
-  public static function changeStateTask(Routes $route)
+  // controlador para crear tareas con prioridad alta por defecto
+  public static function priorityHigh(Routes $route): void
   {
-    $id = $_GET['id'];
-    $changeStateTask = Task::showTask($id);
-    $state = $changeStateTask->getProperty('state');
-    if ($state == 1) {
-      $state = 0;
-    } else {
-      $state = 1;
-    }
-    $result = Task::changeState($state, $id);
+    $result = Task::processMethodsStatics(new PriorityHightTask);
     if ($result) {
-      header('Location: /task?id=' . $id);
+      header('Location: /');
     }
   }
-
-  public static function priorityChangeTask(Routes $route)
+  // controlador para cambiar estado
+  public static function changeTaskState(Routes $route): void
   {
-    $id = $_GET['id'];
+    $taskId = $_GET['id'];
+    $taskFound = Task::showTask($taskId);
+    $taskStatus = $taskFound->getProperty('state');
+    if ($taskStatus == 1) {
+      $taskStatus = 0;
+    } else {
+      $taskStatus = 1;
+    }
+    // $result = Task::changeState($taskStatus, $taskId);
+    $result = Task::processMethodsStatics(new ChangeStateMethod(
+      [
+        'taskStatus' => $taskStatus,
+        'taskId' => $taskId
+      ]
+    ));
+    if ($result) {
+      header('Location: /task?id=' . $taskId);
+    }
+  }
+  // controlador para cambiar prioridad
+  public static function changeTaskPriority(Routes $route): void
+  {
+    $taskId = $_GET['id'];
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $priority = $_POST['priority'];
-      $result =  Task::changePriority($priority, $id);
+      $taskPriority = $_POST['priority'];
+      //$result =  Task::changePriority($taskPriority, $taskId);
+      $result =  Task::processMethodsStatics(new ChangePrioritymethod([
+        'taskPriority' => $taskPriority,
+        'taskId' => $taskId
+      ]));
       if ($result) {
         header("Location: /");
       }
@@ -46,55 +58,50 @@ class NewFuncionalities implements i_FuncionatiesForTask
       ]
     );
   }
-}
 
-
-
-class TaskController extends NewFuncionalities
-{
-  // LAS FUNCIONALIDADES DE AQUÍ YA ESTABAN PREVIAMENTE DEFINIDAS
-  //mostrar todas las tareas
-  public static function inicio(Routes $route)
+  // controlador para mostrar todas las tareas
+  public static function initial(Routes $route): void
   {
     // obtenemos un arreglo de instancias
-    $tasks = Task::showTasks();
+    $tasksFound = Task::showTasks();
     $messages = Task::getMessages();
 
     $route->render(
       [
         'view' => '/pages/inicio',
         'info' => $messages['info'] ?? [],
-        'tasks' => $tasks
+        'tasks' => $tasksFound
       ]
     );
   }
 
-  // mostrar una tarea en especifico
-  public static function showTask(Routes $route)
+  // controlador para mostrar una tarea en especifico
+  public static function showTask(Routes $route): void
   {
-    $paramId = $_GET['id'] ?? null;
-    if (!is_numeric($paramId)) {
+    $taskId = $_GET['id'] ?? null;
+    //debuguear($taskId, true);
+    if (!is_numeric($taskId)) {
       debuguear('no es un numero');
     }
 
-    $task = Task::showTask($paramId);
+    $taskFound = Task::showTask($taskId);
 
     $route->render(
       [
         'view' => '/pages/task',
-        'task' => $task
+        'task' => $taskFound
       ]
     );
   }
 
-  // crear una tarea
-  public static function createTask(Routes $route)
+  // controlador para crear una tarea
+  public static function createTask(Routes $route): void
   {
 
     $newTask = new Task;
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $newTask = new Task($_POST);
-      $messages = $newTask->validar();
+      $messages = $newTask->validate();
       if (empty($messages)) {
         $newTask->createTask();
         $newTask->resetProperties();
@@ -114,44 +121,43 @@ class TaskController extends NewFuncionalities
     );
   }
 
-  // eliminar una tarea
-  public static function deleteTask(Routes $route)
+  // controlador para eliminar una tarea
+  public static function deleteTask(Routes $route): void
   {
-    $id = $_POST['id'];
-    $deleteTask = new Task();
-    $deleteTask->setProperty('id', $id);
-    $result = $deleteTask->deleteTask();
+    $taskId = $_POST['id'];
+    $taskToDelete = new Task();
+    $taskToDelete->setProperty('id', $taskId);
+    $result = $taskToDelete->deleteTask();
     if ($result) {
       header('Location: /');
     }
   }
 
-  // editar una tarea
-  public static function editTask(Routes $route)
+  // controlador para editar una tarea
+  public static function editTask(Routes $route): void
   {
-
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-      $task = new Task($_POST);
-      $task->setProperty('id', $_POST['id']);
-      $messages = $task->validar();
+      $taskToEdit = new Task($_POST);
+      $taskToEdit->setProperty('id', $_POST['id']);
+      $messages = $taskToEdit->validate();
       if (empty($messages)) {
-        $result = $task->editTask();
-        $task->resetProperties();
+        $result = $taskToEdit->editTask();
+        $taskToEdit->resetProperties();
       }
     } else if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      $id = $_GET['id'];
-      $task = Task::showTask($id);
+      $taskId = $_GET['id'];
+      $taskToEdit = Task::showTask($taskId);
     }
 
     $messages = Task::getMessages();
 
-    $task = $task->getProperties();
+    $taskToEdit = $taskToEdit->getProperties();
     $route->render(
       [
         'view' => '/pages/formTask',
-        'task' => $task,
+        'task' => $taskToEdit,
         'edit' => true,
         'errors' => $messages['errors'] ?? [],
         'success' => $messages['success'] ?? [],

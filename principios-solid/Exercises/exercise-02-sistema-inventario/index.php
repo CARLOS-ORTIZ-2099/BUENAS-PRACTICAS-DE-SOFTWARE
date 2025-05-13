@@ -23,19 +23,14 @@ $newRoute->get('/', [ProductController::class, 'showProductsController']);
 
 $newRoute->get('/product', [ProductController::class, 'showProductController']);
 
+
 $newRoute->post('/crear', [ProductController::class, 'createProductController']);
-
-
 $newRoute->get('/crear', [ProductController::class, 'createProductController']);
-
 
 $newRoute->get('/eliminar', [ProductController::class, 'deleteProductController']);
 
 $newRoute->get('/editar', [ProductController::class, 'editProductController']);
-
 $newRoute->post('/editar', [ProductController::class, 'editProductController']);
-
-
 
 
 $newRoute->execute();
