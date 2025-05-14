@@ -19,8 +19,11 @@ require_once __DIR__ . "/controllers/CarritoController.php";
 
 $newRoute = new Routes();
 $newRoute->get('/', [itemsController::class, 'init']);
-$newRoute->post('/addToCart', [CarritoController::class, 'addToCart']);
-$newRoute->get('/viewCart', [CarritoController::class, 'viewCart']);
+$newRoute->post('/addToCart', [CarritoController::class, 'addToCartController']);
+$newRoute->get('/viewCart', [CarritoController::class, 'viewCartController']);
+$newRoute->post('/quantityUpdate', [CarritoController::class, 'quantityUpdateController']);
+$newRoute->post('/removeProduct', [CarritoController::class, 'removeProductController']);
+
 
 
 

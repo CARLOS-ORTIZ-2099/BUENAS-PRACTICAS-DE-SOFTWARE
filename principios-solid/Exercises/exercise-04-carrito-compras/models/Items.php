@@ -32,13 +32,7 @@ class Items extends ConnectDb
     $storage = [];
 
     while ($row  = $result->fetch_assoc()) {
-      $obj = new static;
-      foreach ($row as $key => $value) {
-        if ($value !== null) {
-          $obj->$key = $value;
-        }
-      }
-      $storage[] = $obj;
+      $storage[] = $row;
     }
     return $storage;
   }

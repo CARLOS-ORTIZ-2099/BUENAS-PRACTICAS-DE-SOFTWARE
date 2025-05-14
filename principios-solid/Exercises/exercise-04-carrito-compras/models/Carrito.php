@@ -1,33 +1,49 @@
 
 <?php
 
-interface MethodTypeCalculate
+interface CalculationMethod
 {
-  public function calculateMethod();
+  public function executeCalculation($items): array;
 }
 
 
-class CalculateWithDiscount implements MethodTypeCalculate
+class CalculateTypeDiscount implements CalculationMethod
 {
-  public function calculateMethod()
+  public function executeCalculation($items): array
   {
-    // aqui la lógica para calcular los productos sin descuento
+    //debuguear($items);
+    $data = [];
+    foreach ($items as $item) {
+      if ($item['category'] === 'tecnologia') {
+        // aplicar descuento del 5 % del precio del producto
+        $descuento = ($item['price'] * 5) / 100;
+        $item['precio_original'] =  $item['total_pagar'];
+        $item['total_pagar'] = ($item['total_pagar'] - $descuento);
+      }
+      $data[] = $item;
+    }
+    return $data;
   }
 }
 
-class CalculateNotDiscount implements MethodTypeCalculate
-{
-  public function calculateMethod()
-  {
-    // aqui la lógica para calcular los productos con descuento
-  }
-}
 
-class CalculateDicountDouble implements MethodTypeCalculate
+class CalculateQuantityDiscount implements CalculationMethod
 {
-  public function calculateMethod()
+  public function executeCalculation($items): array
   {
-    // aqui la lógica para calcular los productos con descuento doble
+    $totalPagar = 0;
+    $originalPrice = false;
+    foreach ($items as $item) {
+      $totalPagar += $item['total_pagar'];
+    }
+
+    // debuguear($totalPagar);
+    if (count($items) > 1) {
+      $descuento = ($totalPagar * 10) / 100;
+      $originalPrice = $totalPagar;
+      $totalPagar = $totalPagar - $descuento;
+    }
+    return [$totalPagar, $originalPrice];
   }
 }
 
@@ -49,32 +65,15 @@ class ManageShoppingCart extends ConnectDb
     $this->user_id = $params['userId'] ?? null;
     $this->quantity = $params['quantity'] ?? 1;
   }
-  // Recalcar que para la mayoria de los métodos, estaremos calculando
-  // constantemente el total a pagar
+
   // añadir productos
   public function addProduct()
   {
-    // comprobar si el id de producto  ya esta en el carrito
-    // lo comprobamos de esta manera : 
-    // buscamos si hay un registro cuyo itemId sea igual al que tenemos y si el user_id sea igual al que este logueado
-    $item = $this->getOneCartItem();
-    // si esta solo aumentamos su cantidad
-    if ($item) {
-      $newQuantity = $this->quantity + $item['quantity'];
-      $query = "UPDATE cart_items SET quantity = {$newQuantity}
-      WHERE item_id = {$this->item_id} AND user_id = {$this->user_id}  
-      ";
-      $result = self::$db->query($query);
-      return $result;
-    }
-    // si no esta, añadir producto
-    else {
-      $query = "INSERT INTO cart_items (item_id, user_id, quantity)
+    $query = "INSERT INTO cart_items (item_id, user_id, quantity)
       VALUES({$this->item_id}, {$this->user_id}, {$this->quantity});
       ";
-      $result = self::$db->query($query);
-      return $result;
-    }
+    $result = self::$db->query($query);
+    return $result;
   }
 
   // obtiene un producto de la tabla cart_items
@@ -87,23 +86,61 @@ class ManageShoppingCart extends ConnectDb
     $result = array_shift($result);
     return $result;
   }
-  // obtener todos los productos
-  public function getAllProducts()
-  {
-    // obtenemos todos los productos del carrito de un usuario
-    $query = "SELECT items.*, cart_items.id as id_item_cart, cart_items.quantity,
-    cart_items.user_id
+
+  // obtener todos los productos del carrito
+  public function getAllProducts(
+    CalculationMethod $calculationQuantity,
+    CalculationMethod $calculationCategory
+  ) {
+    $query = "SELECT items.*, 
+    cart_items.id as id_item_cart, 
+    cart_items.quantity,
+    cart_items.user_id,
+    cart_items.quantity *items.price as total_pagar
     FROM cart_items
     INNER JOIN items
     ON cart_items.item_id = items.id
     WHERE user_id = {$this->user_id} ;";
     $result = self::$db->query($query);
     $result = self::processData($result);
+
+    $result = $calculationCategory->executeCalculation($result);
+
     //debuguear($result);
+
+    [$totalPagar, $originalPrice] =
+      $calculationQuantity->executeCalculation($result);
+
+    return [
+      'result' => $result,
+      'totalPagar' => $totalPagar,
+      'originalPrice' => $originalPrice
+    ];
+  }
+
+  // actualizar cantidad
+  public function quantityUpdate($operation)
+  {
+    $query = "UPDATE cart_items SET quantity = quantity $operation {$this->quantity}  WHERE id = {$this->id} ;";
+    $result = self::$db->query($query);
     return $result;
   }
 
-  // comvierte el resultado de la consulta en un objeto
+  // remover un producto del carrito del usuario
+  public function removeProduct()
+  {
+    $query = "DELETE FROM cart_items WHERE id = {$this->id};";
+    self::$db->query($query);
+  }
+
+  // remover todos los productos del carrito del usuario
+  public function removeAllProducts()
+  {
+    $query = "DELETE FROM cart_items WHERE user_id = {$this->user_id};";
+    self::$db->query($query);
+  }
+
+  // procesa el resultado de la consulta en un arreglo asociativo
   public static function processData($result)
   {
     $storage = [];
@@ -114,32 +151,14 @@ class ManageShoppingCart extends ConnectDb
     return $storage;
   }
 
-  // disminuir productos
-  public function reduceProduct($product)
+  // obtiene una propiedad en especifico
+  public function getProperty($key)
   {
-    // reducir la cantidad de un determinado producto
-
-    // dicha cantidad sera de 1 por defecto
-
-    // si el producto llegase a 0 unidades entonces lo 
-    // removemos del carrito
-
+    return $this->$key;
   }
-  // remover un producto
-  public function removeProduct($product)
+  // setea una propiedad en especifico
+  public function setProperty($key, $value)
   {
-    // buscamos el producto en el carrito
-    // luego lo quitamos del carrito
-  }
-  // remover todos los productos
-  public function removeAllProducts()
-  {
-    // eliminamos todos los items del carrito
-  }
-
-  // obtener cantidad de productos
-  public function getQuantityProducts()
-  {
-    // devolver la cantidad de items que contiene el carrito
+    $this->$key = $value;
   }
 }
