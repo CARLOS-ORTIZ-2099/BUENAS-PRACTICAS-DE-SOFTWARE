@@ -105,7 +105,7 @@ WHERE user_id = 2 ;
 
 -- gestor de biblioteca
 
--- tabla library_users
+-- tabla roles
 
 CREATE TABLE roles (
   id INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
@@ -122,6 +122,7 @@ INSERT INTO roles (name) VALUES
 DROP TABLE IF EXISTS roles;
 
 
+-- tabla library_users
 
 CREATE TABLE IF NOT EXISTS  library_users (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
